@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{8fd5ae1f-8b2c-4341-b1fa-e1aaa78c4f60}</ProjectGuid>
+    <RootNamespace>SC4WebInterface</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>.;../lib/gzcom-dll/include/;../lib/arduinocore-avr-1.8.6-wstring/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "C:\Users\$(USERNAME)\Documents\SimCity 4\Plugins" /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>../lib/gzcom-dll/include/;../lib/arduinocore-avr-1.8.6-wstring;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(TargetPath)" "C:\Users\$(USERNAME)\Documents\SimCity 4\Plugins" /y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\lib\libmicrohttpd\autoinit_funcs.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\connection.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\gnutls\init.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\internal.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\memorypool.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_align.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_assert.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_bithelpers.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_byteorder.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_compat.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\MHD_config.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_itc.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_itc_types.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_limits.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_locks.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_md5_wrap.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_mono_clock.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_options.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_panic.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_send.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_sha256_wrap.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_sockets.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_str.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_str_types.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\mhd_threads.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\microhttpd.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\platform.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\postprocessor.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\response.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\sysfdsetsize.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\tsearch.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cGZAllocatorServiceSTLAllocator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cGZCOMLibrary.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cGZMessage.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZAllocatorService.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZApp.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCanvasMessage.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCheatCodeManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCOM.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCOMDirector.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCOMLibrary.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCommandDispatcher.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZCommandServer.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZDate.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZFrameWork.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZFrameWorkHooks.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZIStream.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZKeyMessage.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessage2.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessage2Standard.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessageServer.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessageServer2.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessageTarget.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMessageTarget2.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZMouseMessage.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZOStream.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZRadio.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZSerializable.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZString.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZSystemService.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZUnknown.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZUnknownList.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZWin.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cIGZWinMgr.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC424HourClock.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC43DRender.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Advice.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4AdviceSubject.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Advisor.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4AdvisorSystem.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4App.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4BudgetSimulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4BuildingDevelopmentSimulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4BuildingOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4BusinessUnit.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4City.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4ConstructionOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DBSegmentIStream.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DBSegmentOStream.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterInstance.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterInstanceFire.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterInstanceVolcano.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterLayer.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterManagerFire.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4DisasterManagerVolcano.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4FeatureManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4FireOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4FloraOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4FoundationOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4HistoryWarehouse.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LandfillOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Lot.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotBaseTextureOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotConfiguration.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotConfigurationManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotDeveloper.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4LotRetainingWallOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Nation.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4NetworkManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Occupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4OccupantFilter.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4OccupantManager.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4PoliceSimulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4PollutionSimulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4PowerLineOccupant.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Region.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4RegionalCity.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4RenderProperties.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4ResidentialSimulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4SimGrid.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4Simulator.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4TractDeveloper.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4TrafficSource.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4TutorialSystem.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISC4View3DWin.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISCExemplarPropertyHolder.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISCPropertyHolder.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cISCResExemplar.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZAutoRefCount.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZBaseString.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZCOMDllDirector.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZMessage2.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZMessage2COMDirector.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZMessage2Standard.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZPoint.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZSysServPtr.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cRZUnknown.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cS3DCamera.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cS3DVector3.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\cSC4OccupantTypeFilter.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\GZCLSIDDefs.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\GZMSGIDDefs.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\GZServDecls.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\GZServPtrs.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\ilist.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\SC4Point.h" />
+    <ClInclude Include="..\lib\gzcom-dll\include\SC4Rect.h" />
+    <ClInclude Include="arduino_wstring_x86_64.h" />
+    <ClInclude Include="cMessageLoggerCOMDirector.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\lib\gzcom-dll\src\cRZBaseString.cpp" />
+    <ClCompile Include="..\lib\gzcom-dll\src\cRZCOMDllDirector.cpp" />
+    <ClCompile Include="..\lib\gzcom-dll\src\cRZMessage2.cpp" />
+    <ClCompile Include="..\lib\gzcom-dll\src\cRZMessage2Standard.cpp" />
+    <ClCompile Include="..\lib\arduinocore-avr-1.8.6-wstring\WString.cpp" />
+    <ClCompile Include="..\lib\libmicrohttpd\connection.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\daemon.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\gnutls\init.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\internal.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\memorypool.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_compat.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_itc.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_mono_clock.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_panic.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_send.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_sockets.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_str.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\mhd_threads.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\minimal_example.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\postprocessor.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\reason_phrase.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\response.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\sysfdsetsize.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\tsearch.c" />
+    <ClCompile Include="arduino_wstring_x86_64.cpp" />
+    <ClCompile Include="cMessageLoggerCOMDirector.cpp" />
+    <ClCompile Include="common.cpp" />
+    <ClCompile Include="CServer.cpp" />
+    <ClCompile Include="CState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SC4WebInterface.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

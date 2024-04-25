@@ -1,0 +1,24 @@
+all:
+	gcc -c ../mhd_panic.c -I./../ -I. -o mhd_panic.o
+	gcc -c ../sysfdsetsize.c -I./../ -I. -o sysfdsetsize.o
+	gcc -c ../response.c -I./../ -I. -o response.o
+	gcc -c ../linux/internal.c -I./../ -I. -o internal.o
+	gcc -c ../mhd_compat.c -I./../ -I. -o mhd_compat.o
+	gcc -c ../mhd_send.c -I./../ -I. -o mhd_send.o
+	gcc -c ../postprocessor.c -I./../ -I. -o postprocessor.o
+	gcc -c ../connection.c -I./../ -I. -o connection.o
+	gcc -c ../tsearch.c -I./../ -I. -o tsearch.o
+	gcc -c ../daemon.c -I./../ -I. -o daemon.o
+	gcc -c ../mhd_itc.c -I./../ -I. -o mhd_itc.o
+	gcc -c ../reason_phrase.c -I./../ -I. -o reason_phrase.o
+	gcc -c ../mhd_sockets.c -I./../ -I. -o mhd_sockets.o
+	gcc -c ../mhd_str.c -I./../ -I. -o mhd_str.o
+	gcc -c ../gnutls/init.c -I./../ -I. -o init.o
+	gcc -c ../mhd_mono_clock.c -I./../ -I. -o mhd_mono_clock.o
+	gcc -c ../mhd_threads.c -I./../ -I. -o mhd_threads.o
+	gcc -c ../memorypool.c -I./../ -I. -o memorypool.o
+	ar rcs libmicrohttpd.a mhd_panic.o sysfdsetsize.o response.o internal.o mhd_compat.o mhd_send.o postprocessor.o connection.o tsearch.o daemon.o mhd_itc.o reason_phrase.o mhd_sockets.o mhd_str.o init.o mhd_mono_clock.o mhd_threads.o memorypool.o
+
+clean:
+	rm *.o
+	rm *.a

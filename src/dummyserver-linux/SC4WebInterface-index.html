@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>SimCity4 WebInterface Plugin</title>
+
+<style>
+@font-face {
+  font-family: 'RobotoBold'; // Sim City 4 uses "ITC Stoclet", but it's not available for free
+  src: URL('sc4_webif_font_roboto-bold.ttf') format('truetype');
+}
+h3 {
+  font-family: "RobotoBold"; 
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+h4 {
+  color: #3b4b64;
+  font-family: "RobotoBold";
+  font-size: 12pt;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+h5 {
+  color: #3b4b64;
+  font-family: "RobotoBold";
+  font-size: 8pt;
+  height: 6px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+textarea {
+  background-color: #eff3f7
+  font-family: "RobotoBold";
+  font-size: 6pt;
+}
+#outer {
+  border-radius: 8px;
+  background: #a1b3c9;
+  
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  
+  margin-top: 0px;
+}
+#inner {
+  border-radius: 8px;
+  background: #dee1ea;
+
+  padding-top: 2px;
+  padding-bottom: 8px;
+  padding-right: 5px;
+  padding-left: 5px;
+  
+  margin-bottom: 8px;
+}
+#footer {
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  height: 15px;
+  font-size:6pt; 
+  text-align:left;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+</style>
+
+<script>
+setInterval(function() {
+  getData();
+}, 1000);
+
+function getData() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("state").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "state", true);
+  xhttp.send();
+}
+
+function playPause() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "/playpause", true);
+  xhttp.send();
+}
+</script>
+
+</head>
+<body>
+	<div id="header">
+    <h3>Sim City 4 Web-Interface Plug-In</h3>
+  </div>
+
+  <div id="outer" style="width: 380px">
+    <h4>State</h4>
+    <div id="inner">
+      <h5>Game Speed</h5>
+      <button class="button" onclick="playPause()">Play/Pause</button><br />
+    </div>
+    <div id="inner">
+      <h5>JSON</h5>
+      <textarea rows="20" cols="64" id="state" placeholder="connecting" spellcheck="false"></textarea>
+    </div>
+  </div>
+
+  <div id="footer">
+    SimCity4 WebInterface Plugin : D.Salzner : www.dennissalzner.de : 2024
+  </div>
+	
+</body>
+</html>
