@@ -1,12 +1,12 @@
 # Sim City 4 Web-Interface Plug-In
 
-A Plug-In for Sim City 4 that allows viewing game metrics in a web browser. The web browser can run on a secondary monitor, smart phone or tablet. This adds basic second-screen/multi-monitor capabilities to the game.
+A plug-in for Sim City 4 that allows viewing game metrics in a web browser. The web browser can run on a secondary monitor, smart phone or tablet. This adds basic second-screen/multi-monitor capabilities to the game.
 
 The web interface can be edited by altering the included *.html page. It uses AJAX to automatically update game metrics from the plug-in via JSON.
 
 The plug-in supports pausing the game so it can automatically pause the game based on a metric e.g if available power or population fall below a threshold. That way the game can be run unattended without risk.
 
-![SimCity 4 Web-Interface Plug-In](scrn/2024-05-25-SimCity4WebInterfacePlugIn.png)
+![SimCity 4 Web-Interface Plug-In](scrn/2024-05-27-SimCity4WebInterfacePlugIn.png)
 
 ## Dependencies
 
@@ -23,7 +23,7 @@ Dependencies are in the ```lib/``` folder
 
 ## Usage
 
-copy ```SC4WebInterface.dll``` and ```SC4WebInterface_index.html``` to
+Copy ```SC4WebInterface.dll``` and ```SC4WebInterface_index.html``` to
 
 ```
 C:\Users\<UserName>\Documents\SimCity 4\Plugins
@@ -35,7 +35,7 @@ Unblock port 9030/tcp in firewall. For this on administrator PowerShell:
 netsh advfirewall firewall add rule name="Open Port 9030" dir=in action=allow protocol=TCP localport=9030
 ```
 
-run the game. It may be helpful to run it in window mode (see below).
+Run the game. It may be helpful to run it in window mode (see below).
 
 Then in your web-browser open
 
@@ -117,3 +117,16 @@ make
 ./main
 ```
 
+## Release History
+
+### v0.0.2
+
+* Performance improvement. Less frequent internal state updates.
+* Pause from the interface now works more reliably. It engages/disengages and when engaged pauses the game at the next simulated month.
+* Interface now also shows a plot of income/expenses
+* Visual Studio project configuration path fixes
+
+### v0.0.1
+
+* Initial Release
+* Interface shows JSON

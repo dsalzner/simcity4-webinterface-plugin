@@ -59,80 +59,78 @@ bool cMessageLoggerCOMDirector::PostAppInit() {
 bool cMessageLoggerCOMDirector::DoMessage(cIGZMessage2* pMessage) {
   cIGZMessage2Standard* pStandardMessage = static_cast<cIGZMessage2Standard*>(pMessage);
   uint32_t dwType = pMessage->GetType();
+  if (dwType == 0x66956816) { // kSC4MessageSimNewMonth
+	  logMessage("[ ] Update Internal State");
+	  cISC4AppPtr pSC4App;
+	  if (pSC4App) {
+		  cISC4City* pCity = pSC4App->GetCity();
+		  if (pCity) {
+			  cRZBaseString tmp;
 
-  cISC4AppPtr pSC4App;
-  if (pSC4App) {
-    cISC4City* pCity = pSC4App->GetCity();
-    if (pCity) {
-      cRZBaseString tmp;
+			  // -- set city name
+			  pCity->GetCityName(tmp);
+			  m_state->setEntry("cityName", tmp.ToChar());
 
-	    // -- set city name
-      pCity->GetCityName(tmp);
-      logMessage("[I] CityName: " + String(tmp.ToChar()));
-      m_state->setEntry("cityName", tmp.ToChar());
+			  // -- set city description
+			  pCity->GetCityDescription(tmp);
+			  m_state->setEntry("cityDescription", tmp.ToChar());
 
-	    // -- set city description
-	    pCity->GetCityDescription(tmp);
-	    m_state->setEntry("cityDescription", tmp.ToChar());
+			  // -- set mayor name
+			  pCity->GetMayorName(tmp);
+			  m_state->setEntry("mayorName", tmp.ToChar());
 
-	    // -- set mayor name
-	    pCity->GetMayorName(tmp);
-	    m_state->setEntry("mayorName", tmp.ToChar());
+			  // -- set low/medium/high wealth population
+			  auto getPopulation = [&](uint32_t groupId) {
+				  cISC4DemandSimulator* pDemandSimulator = pCity->GetDemandSimulator();
+				  if (pDemandSimulator) {
+					  constexpr uint32_t cityCensusIndex = 0;
+					  const cISC4Demand* demand = pDemandSimulator->GetDemand(groupId, cityCensusIndex);
+					  if (demand) {
+						  float value = demand->QuerySupplyValue();
+						  return static_cast<int>(value);
+					  }
+				  }
+				  return 0;
+				  };
+			  m_state->setEntry("lowWealthPopulation", String(getPopulation(0x1011)));
+			  m_state->setEntry("medWealthPopulation", String(getPopulation(0x1021)));
+			  m_state->setEntry("highWealthPopulation", String(getPopulation(0x1031)));
 
-	    // -- set low/medium/high wealth population
-	    auto getPopulation = [&](uint32_t groupId) {
-		    cISC4DemandSimulator* pDemandSimulator = pCity->GetDemandSimulator();
-		    if (pDemandSimulator) {
-			    constexpr uint32_t cityCensusIndex = 0;
-			    const cISC4Demand* demand = pDemandSimulator->GetDemand(groupId, cityCensusIndex);
-			    if (demand) {
-				    float value = demand->QuerySupplyValue();
-				    return static_cast<int>(value);
-			    }
-		    }
-		    return 0;
-	    };
-	    m_state->setEntry("lowWealthPopulation", String(getPopulation(0x1011)));
-	    m_state->setEntry("medWealthPopulation", String(getPopulation(0x1021)));
-	    m_state->setEntry("highWealthPopulation", String(getPopulation(0x1031)));
+			  // -- set budget
+			  cISC4BudgetSimulator* pBudgetSimulator = pCity->GetBudgetSimulator();
+			  if (pBudgetSimulator) {
+				  m_state->setEntry("ytdIncome", String(static_cast<int>(pBudgetSimulator->GetYTDIncome())));
+				  m_state->setEntry("ytdExpenses", String(static_cast<int>(pBudgetSimulator->GetEstIncome())));
 
-	    // -- set budget
-	    cISC4BudgetSimulator* pBudgetSimulator = pCity->GetBudgetSimulator();
-	    if(pBudgetSimulator) {
-		    m_state->setEntry("ytdIncome", String(static_cast<int>(pBudgetSimulator->GetYTDIncome())));
-		    m_state->setEntry("ytdExpenses", String(static_cast<int>(pBudgetSimulator->GetEstIncome())));
+				  m_state->setEntry("estIncome", String(static_cast<int>(pBudgetSimulator->GetYTDExpenses())));
+				  m_state->setEntry("estExpenses", String(static_cast<int>(pBudgetSimulator->GetEstExpenses())));
 
-		    m_state->setEntry("estIncome", String(static_cast<int>(pBudgetSimulator->GetYTDExpenses())));
-		    m_state->setEntry("estExpenses", String(static_cast<int>(pBudgetSimulator->GetEstExpenses())));
+				  m_state->setEntry("totalMonthlyExpense", String(static_cast<int>(pBudgetSimulator->GetTotalMonthlyExpense())));
+				  m_state->setEntry("totalYearlyExpense", String(static_cast<int>(pBudgetSimulator->GetTotalYearlyExpense())));
 
-		    m_state->setEntry("totalMonthlyExpense", String(static_cast<int>(pBudgetSimulator->GetTotalMonthlyExpense())));
-		    m_state->setEntry("totalYearlyExpense", String(static_cast<int>(pBudgetSimulator->GetTotalYearlyExpense())));
+				  m_state->setEntry("totalMonthlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalMonthlyIncome())));
+				  m_state->setEntry("totalYearlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalYearlyIncome())));
+			  }
 
-		    m_state->setEntry("totalMonthlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalMonthlyIncome())));
-		    m_state->setEntry("totalYearlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalYearlyIncome())));
-	    }
+			  // -- set play/pause
+			  auto setPause = [&](bool pause) {
+				  cISC4Simulator* pSimulator = pCity->GetSimulator();
+				  if (pSimulator) {
+					  if (pause) {
+						  pSimulator->Pause();
+					  }
+					  else {
+						  pSimulator->SetSimSpeed(0);
+					  }
+				  }
+				  };
 
-	    // -- set play/pause
-	    auto setPause = [&](bool pause) {
-		    cISC4Simulator* pSimulator = pCity->GetSimulator();
-		    if (pSimulator) {
-			    if (pause) {
-				    pSimulator->Pause();
-			    } else {
-				    pSimulator->SetSimSpeed(0);
-			    }
-		    }
-	    };
-
-	    if (m_state->getEntry("isPaused") == "1") {
-		    logMessage("[ ] Pause Game");
-		    setPause(true);
-	    }
-	    if (m_state->getEntry("isPaused") == "0") {
-		    logMessage("[ ] Continue Game");
-		    setPause(false);
-	    }
-    }
+			  if (m_state->getEntry("pauseAtEndOfMonth") == "1") {
+				  logMessage("[ ] Pause Game");
+				  setPause(true);
+			  }
+		  }
+	  }
   }
   return true;
 }

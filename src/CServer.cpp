@@ -73,10 +73,10 @@ String CServer::handleRequest(std::shared_ptr<CState> state, String url) {
   }
   // -- play/pause
   if (url == "/playpause") {
-    if (state->getEntry("isPaused") == "1") {
-	  state->setEntry("isPaused", "0");			
+    if (state->getEntry("pauseAtEndOfMonth") == "1") {
+	    state->setEntry("pauseAtEndOfMonth", "0");
     } else {
-	  state->setEntry("isPaused", "1");
+	    state->setEntry("pauseAtEndOfMonth", "1");
     }
     return state->serializeToJson();
   }
@@ -98,7 +98,7 @@ enum MHD_Result CServer::ahc_echo(void* cls, struct MHD_Connection* connection,
 
   // -- load json
   struct handler_param* param = (struct handler_param*)cls;
-  param->m_response = handleRequest(param->m_state, url); // note: stays alive to server has time to respond from within its thread
+  param->m_response = handleRequest(param->m_state, url); // note: stays alive to giver server time to respond from its thread
 
   // -- respond
   struct MHD_Response* response;

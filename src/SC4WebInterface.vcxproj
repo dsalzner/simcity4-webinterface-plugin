@@ -49,7 +49,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.;../lib/gzcom-dll/include/;../lib/arduinocore-avr-1.8.6-wstring/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../lib/gzcom-dll/include/;../lib/arduinocore-avr-1.8.6-wstring/;../lib/libmicrohttpd/windows;../lib/libmicrohttpd;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -88,7 +88,6 @@
     <ClInclude Include="..\lib\libmicrohttpd\autoinit_funcs.h" />
     <ClInclude Include="..\lib\libmicrohttpd\connection.h" />
     <ClInclude Include="..\lib\libmicrohttpd\gnutls\init.h" />
-    <ClInclude Include="..\lib\libmicrohttpd\internal.h" />
     <ClInclude Include="..\lib\libmicrohttpd\memorypool.h" />
     <ClInclude Include="..\lib\libmicrohttpd\mhd_align.h" />
     <ClInclude Include="..\lib\libmicrohttpd\mhd_assert.h" />
@@ -224,6 +223,7 @@
     <ClInclude Include="..\lib\gzcom-dll\include\ilist.h" />
     <ClInclude Include="..\lib\gzcom-dll\include\SC4Point.h" />
     <ClInclude Include="..\lib\gzcom-dll\include\SC4Rect.h" />
+    <ClInclude Include="..\lib\libmicrohttpd\windows\internal.h" />
     <ClInclude Include="arduino_wstring_x86_64.h" />
     <ClInclude Include="cMessageLoggerCOMDirector.h" />
     <ClInclude Include="resource.h" />
@@ -237,7 +237,6 @@
     <ClCompile Include="..\lib\libmicrohttpd\connection.c" />
     <ClCompile Include="..\lib\libmicrohttpd\daemon.c" />
     <ClCompile Include="..\lib\libmicrohttpd\gnutls\init.c" />
-    <ClCompile Include="..\lib\libmicrohttpd\internal.c" />
     <ClCompile Include="..\lib\libmicrohttpd\memorypool.c" />
     <ClCompile Include="..\lib\libmicrohttpd\mhd_compat.c" />
     <ClCompile Include="..\lib\libmicrohttpd\mhd_itc.c" />
@@ -247,12 +246,12 @@
     <ClCompile Include="..\lib\libmicrohttpd\mhd_sockets.c" />
     <ClCompile Include="..\lib\libmicrohttpd\mhd_str.c" />
     <ClCompile Include="..\lib\libmicrohttpd\mhd_threads.c" />
-    <ClCompile Include="..\lib\libmicrohttpd\minimal_example.c" />
     <ClCompile Include="..\lib\libmicrohttpd\postprocessor.c" />
     <ClCompile Include="..\lib\libmicrohttpd\reason_phrase.c" />
     <ClCompile Include="..\lib\libmicrohttpd\response.c" />
     <ClCompile Include="..\lib\libmicrohttpd\sysfdsetsize.c" />
     <ClCompile Include="..\lib\libmicrohttpd\tsearch.c" />
+    <ClCompile Include="..\lib\libmicrohttpd\windows\internal.c" />
     <ClCompile Include="arduino_wstring_x86_64.cpp" />
     <ClCompile Include="cMessageLoggerCOMDirector.cpp" />
     <ClCompile Include="common.cpp" />

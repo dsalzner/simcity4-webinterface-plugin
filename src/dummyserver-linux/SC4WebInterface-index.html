@@ -32,6 +32,9 @@ textarea {
   font-family: "RobotoBold";
   font-size: 6pt;
 }
+#content {
+  display: table;
+}
 #outer {
   border-radius: 8px;
   background: #a1b3c9;
@@ -41,7 +44,7 @@ textarea {
   padding-right: 5px;
   padding-left: 5px;
   
-  margin-top: 0px;
+  display: table-cell;
 }
 #inner {
   border-radius: 8px;
@@ -51,7 +54,7 @@ textarea {
   padding-bottom: 8px;
   padding-right: 5px;
   padding-left: 5px;
-  
+
   margin-bottom: 8px;
 }
 #footer {
@@ -66,21 +69,34 @@ textarea {
   left: 0;
 }
 </style>
-
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
+currentX = 0;
+xValues = [];
+yValues1 = [];
+yValues2 = [];
+
 setInterval(function() {
   getData();
-}, 1000);
+}, 1500);
 
 function getData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("state").innerHTML =
-      this.responseText;
+	    var jsonStr = this.responseText.replace(",\n}", "\n}").replace("/", "").replace(": ", ":");
+	    document.getElementById("state").innerHTML = jsonStr;
+
+	    var json = JSON.parse(jsonStr);
+	    currentX += 1;
+	    xValues.push(currentX)
+	    yValues1.push(json.totalMonthlyIncome)
+	    yValues2.push(json.totalMonthlyExpense)
+	    plotGraph();
     }
   };
   xhttp.open("GET", "state", true);
+  xhttp.overrideMimeType("text/plain");
   xhttp.send();
 }
 
@@ -89,29 +105,63 @@ function playPause() {
   xhttp.open("GET", "/playpause", true);
   xhttp.send();
 }
+
+function plotGraph() {
+  const graph = document.getElementById('graph');
+  graph.innerHTML = '';
+  const trace1 = {
+	  x: xValues,
+	  y: yValues1,
+	  type: 'scatter',
+	  mode: 'lines',
+	  name: 'Income'
+  };
+  const trace2 = {
+	  x: xValues,
+	  y: yValues2,
+	  type: 'scatter',
+	  mode: 'lines',
+	  name: 'Expense'
+  };
+  yMax = Math.max(Math.max(...yValues1), Math.max(...yValues2)) * 1.5;
+  const layout = {
+	  margin: {t:10,r:10,b:30,l:50},
+	  paper_bgcolor: "#dee1ea",
+	  xaxis: { title: 'time' },
+	  yaxis: { title: 'income', range: [0, yMax]},
+  };
+  Plotly.newPlot(graph, [trace1, trace2], layout);
+}
 </script>
 
 </head>
 <body>
-	<div id="header">
+  <div id="header">
     <h3>Sim City 4 Web-Interface Plug-In</h3>
   </div>
 
-  <div id="outer" style="width: 380px">
-    <h4>State</h4>
-    <div id="inner">
-      <h5>Game Speed</h5>
-      <button class="button" onclick="playPause()">Play/Pause</button><br />
+  <div id="content">
+    <div id="outer" style="width: 310px">
+      <h4>State</h4>
+      <div id="inner">
+        <h5>Game Speed</h5>
+        <button class="button" onclick="playPause()">Play/Pause</button><br />
+      </div>
+      <div id="inner">
+        <h5>JSON</h5>
+        <textarea rows="18" cols="64" id="state" placeholder="connecting" spellcheck="false"></textarea>
+      </div>
     </div>
-    <div id="inner">
-      <h5>JSON</h5>
-      <textarea rows="20" cols="64" id="state" placeholder="connecting" spellcheck="false"></textarea>
+    <div style="width: 8px"></div>
+    <div id="outer" style="width: 480px">
+      <h4>Income/Expenses</h4>
+      <div id="inner">
+        <div class="graph" id="graph" style="height: 280px; width: 460px"></div>
+      </div>
+     </div>
+    <div id="footer">
+      SimCity4 WebInterface Plugin : D.Salzner : www.dennissalzner.de : 2024
     </div>
   </div>
-
-  <div id="footer">
-    SimCity4 WebInterface Plugin : D.Salzner : www.dennissalzner.de : 2024
-  </div>
-	
 </body>
 </html>

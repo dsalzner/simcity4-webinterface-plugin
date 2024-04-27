@@ -61,7 +61,7 @@ public:
       { "totalMonthlyIncome", "n/a" },
       { "totalYearlyIncome", "n/a" },
 
-      { "isPaused", "n/a" },
+      { "pauseAtEndOfMonth", "0" },
     };
     
     /*! \brief Returns a JSON string of the internal state
