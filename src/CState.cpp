@@ -45,7 +45,8 @@ String CState::serializeToJson() {
     jsonBuffer += "\"" + m_state[i][0] + "\": ";
     jsonBuffer += "\"" +  m_state[i][1] + "\",\n";
   }
-  jsonBuffer += "}";
+  jsonBuffer.remove(jsonBuffer.length() - 2); // remove last comma
+  jsonBuffer += "}\n";
   return jsonBuffer;
 }
 
@@ -86,4 +87,5 @@ void CState::setEntry(String key, String value) {
           return;
       }
   }
+  logMessage("[W] Internal State is not configured to hold key '" + key + "'");
 }

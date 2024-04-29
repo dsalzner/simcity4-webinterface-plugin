@@ -6,7 +6,11 @@ The web interface can be edited by altering the included *.html page. It uses AJ
 
 The plug-in supports pausing the game so it can automatically pause the game based on a metric e.g if available power or population fall below a threshold. That way the game can be run unattended without risk.
 
-![SimCity 4 Web-Interface Plug-In](scrn/2024-05-27-SimCity4WebInterfacePlugIn.png)
+![SimCity 4 Web-Interface Plug-In](scrn/2024-04-29-SimCity4WebInterfacePlugIn.png)
+
+* [Technical Information](https://www.dennissalzner.de/gamemods/2024/03/31/So-SimCity4Plugins.html)
+* [Releases](https://github.com/dsalzner/simcity4-webinterface-plugin/releases)
+* [Simtropolis](https://community.simtropolis.com/files/file/36218-sc4webinterface/)
 
 ## Dependencies
 
@@ -68,7 +72,7 @@ http://127.0.0.1:9030/state
 "totalYearlyExpense": "n/a",
 "totalMonthlyIncome": "n/a",
 "totalYearlyIncome": "n/a",
-"isPaused": "n/a",
+"pauseAtEndOfMonth": "n/a",
 }
 ```
 
@@ -82,42 +86,20 @@ You may want to add additional parameters to launch the game in window mode and 
 
 When launching from Steam set these parameters in the Steam game options menu.
 
-## Compiling from source
+## Contributing & Compiling from source
 
 The code can be compiled from source on Windows with Visual Studio 2022.
 Alternatively there is a Dummy-Server that can be built and run under Linux.
 
-### Visual Studio
-
-* Visual Studio 2022 Community Edition
-
-### Configure
-
-In ```SC4WebInterface.vcxproj``` adjust
-
-* ```<Command>xcopy "$(TargetPath)" "``` xcopy to your Sim City 4 plugin path
-
-### Build
-
-From the VS 2022 Developer Command Prompt, run
-
-```
-cd src/
-msbuild .\SC4WebInterface.sln
-```
-
-## (Optional) a standalone Dummy-Server for Linux
-
-```
-cd lib/libmicrohttpd/linux
-make
-make -f Makefile.staticlib
-cd ../../../src/dummyserver-linux
-make
-./main
-```
+Anyone is welcome to contribute, see [Guide on Contributing](CONTRIBUTING.md)
 
 ## Release History
+
+### v0.0.3
+
+* additional metrics and plots for residential population and high tech industry
+* pause when income falls below expense or at end of month
+* improved interface, can now show/hide windows, more responsive
 
 ### v0.0.2
 

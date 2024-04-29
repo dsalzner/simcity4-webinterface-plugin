@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cISC4DemandSimulator.h"
 #include "cISC4Demand.h"
 #include "cISC4BudgetSimulator.h"
+#include "cISC4PollutionSimulator.h"
+
 
 cMessageLoggerCOMDirector::cMessageLoggerCOMDirector() {
   m_state = std::make_shared<CState>();
@@ -87,14 +89,25 @@ bool cMessageLoggerCOMDirector::DoMessage(cIGZMessage2* pMessage) {
 					  const cISC4Demand* demand = pDemandSimulator->GetDemand(groupId, cityCensusIndex);
 					  if (demand) {
 						  float value = demand->QuerySupplyValue();
-						  return static_cast<int>(value);
+						  return String(static_cast<int>(value));
 					  }
 				  }
-				  return 0;
-				  };
-			  m_state->setEntry("lowWealthPopulation", String(getPopulation(0x1011)));
-			  m_state->setEntry("medWealthPopulation", String(getPopulation(0x1021)));
-			  m_state->setEntry("highWealthPopulation", String(getPopulation(0x1031)));
+				  return String("");
+				};
+			  m_state->setEntry("populationR1", getPopulation(0x1010));
+			  m_state->setEntry("populationR2", getPopulation(0x1020));
+			  m_state->setEntry("populationR3", getPopulation(0x1030));
+
+			  m_state->setEntry("populationCs1", getPopulation(0x3110));
+			  m_state->setEntry("populationCs2", getPopulation(0x3120));
+			  m_state->setEntry("populationCs3", getPopulation(0x3130));
+        m_state->setEntry("populationCo2", getPopulation(0x3320));
+        m_state->setEntry("populationCo3", getPopulation(0x3330));
+
+        m_state->setEntry("populationIR", getPopulation(0x4100));
+        m_state->setEntry("populationID", getPopulation(0x4200));
+        m_state->setEntry("populationIM", getPopulation(0x4300));
+        m_state->setEntry("populationIHT", getPopulation(0x4400));
 
 			  // -- set budget
 			  cISC4BudgetSimulator* pBudgetSimulator = pCity->GetBudgetSimulator();
@@ -110,6 +123,12 @@ bool cMessageLoggerCOMDirector::DoMessage(cIGZMessage2* pMessage) {
 
 				  m_state->setEntry("totalMonthlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalMonthlyIncome())));
 				  m_state->setEntry("totalYearlyIncome", String(static_cast<int>(pBudgetSimulator->GetTotalYearlyIncome())));
+			  }
+
+			  // -- set water pollution
+			  cISC4PollutionSimulator* pPolutionSimulator = pCity->GetPollutionSimulator();
+			  if (pPolutionSimulator) {
+				  m_state->setEntry("waterPollutionLevel", String(static_cast<int>(pPolutionSimulator->GetAverageWaterValue())));
 			  }
 
 			  // -- set play/pause

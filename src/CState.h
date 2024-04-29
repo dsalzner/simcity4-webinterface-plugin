@@ -39,17 +39,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class CState {
 public:
-    static const int state_rows = 16;
+    static const int state_rows = 31;
     String m_state[state_rows][2] = {
       { "timestamp", "n/a" },
       { "cityName", "n/a" }, 
       { "cityDescription", "n/a" },
       { "mayorName", "n/a" },
       
-      { "lowWealthPopulation", "n/a" },
-      { "medWealthPopulation", "n/a" },
-      { "highWealthPopulation", "n/a" },
-      
+      { "populationR1", "n/a" },
+      { "populationR2", "n/a" },
+      { "populationR3", "n/a" },
+
+      { "populationCs1", "n/a" },
+      { "populationCs2", "n/a" },
+      { "populationCs3", "n/a" },
+
+      { "populationCo2", "n/a" },
+      { "populationCo3", "n/a" },
+
+      { "populationIR", "n/a" },
+      { "populationID", "n/a" },
+      { "populationIM", "n/a" },
+      { "populationIHT", "n/a" },
+
       { "ytdIncome", "n/a" },
       { "ytdExpenses", "n/a" },
       
@@ -61,7 +73,15 @@ public:
       { "totalMonthlyIncome", "n/a" },
       { "totalYearlyIncome", "n/a" },
 
-      { "pauseAtEndOfMonth", "0" },
+      { "waterPollutionLevel", "n/a" },
+
+      { "demandCommercialLow", "n/a" },
+      { "demandCommercialMedium", "n/a" },
+      { "demandCommercialHigh", "n/a" },
+      { "kIRDemand", "n/a" },
+
+      { "unknown", "n/a" },
+      { "pauseAtEndOfMonth", "0" }
     };
     
     /*! \brief Returns a JSON string of the internal state
