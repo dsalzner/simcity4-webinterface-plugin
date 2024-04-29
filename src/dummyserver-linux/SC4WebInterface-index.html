@@ -1,11 +1,33 @@
+<!--
+Sim City 4 Web Interface Plug-In
+Copyright (C) 2024 D.Salzner <mail@dennissalzner.de>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <html>
 <head>
-<title>SimCity4 WebInterface Plugin</title>
+<title>Sim City 4 Web-Interface</title>
 
 <style>
 @font-face {
   font-family: 'RobotoBold'; // Sim City 4 uses "ITC Stoclet", but it's not available for free
-  src: URL('sc4_webif_font_roboto-bold.ttf') format('truetype');
+}
+@media (max-width: 800px) {
+  .flex-item-right, .flex-item-left {
+    flex: 100%;
+  }
 }
 h3 {
   font-family: "RobotoBold"; 
@@ -32,11 +54,19 @@ textarea {
   font-family: "RobotoBold";
   font-size: 6pt;
 }
-#content {
-  display: table;
+label {
+  background-color: #eff3f7
+  font-family: "RobotoBold";
+  font-size: 9pt;
+  white-space: nowrap;
 }
-#outer {
+.content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.outer {
   border-radius: 8px;
+  border: 2px solid white;
   background: #a1b3c9;
   
   padding-top: 2px;
@@ -44,9 +74,9 @@ textarea {
   padding-right: 5px;
   padding-left: 5px;
   
-  display: table-cell;
+  flex: 20%;
 }
-#inner {
+.inner {
   border-radius: 8px;
   background: #dee1ea;
 
@@ -56,8 +86,9 @@ textarea {
   padding-left: 5px;
 
   margin-bottom: 8px;
+  display: block;
 }
-#footer {
+.footer {
   bottom: 0;
   width: 100%;
   background-color: white;
@@ -68,31 +99,47 @@ textarea {
   bottom: 0;
   left: 0;
 }
+.foldbutton {
+  display: inline;
+  float: right;
+  border: 2px solid rgb(222,232,227);
+  color: rgb(222,232,227);
+  font-size: 8px;
+  width: 12px;
+  height: 12px;
+  text-align: center;
+  vertical-align: middle;
+}
 </style>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-currentX = 0;
-xValues = [];
-yValues1 = [];
-yValues2 = [];
 
 setInterval(function() {
   getData();
 }, 1500);
 
+currentX = 0;
+graphX = [];
 function getData() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-	    var jsonStr = this.responseText.replace(",\n}", "\n}").replace("/", "").replace(": ", ":");
+	    var jsonStr = this.responseText;
 	    document.getElementById("state").innerHTML = jsonStr;
 
 	    var json = JSON.parse(jsonStr);
 	    currentX += 1;
-	    xValues.push(currentX)
-	    yValues1.push(json.totalMonthlyIncome)
-	    yValues2.push(json.totalMonthlyExpense)
-	    plotGraph();
+      graphX.push(currentX)
+	    graphUpdate(json);
+
+      if(document.getElementById("pauseMonth").checked) {
+        pause();
+      }
+      if(document.getElementById("pauseMonthExpenses").checked) {
+        if(int(json.totalMonthlyIncome) < int(json.totalMonthlyExpense)) {
+          pause();
+        }
+      }
     }
   };
   xhttp.open("GET", "state", true);
@@ -106,62 +153,138 @@ function playPause() {
   xhttp.send();
 }
 
-function plotGraph() {
-  const graph = document.getElementById('graph');
+function graphPlot(domID, values, labels, colors) {
+  var graph = document.getElementById(domID);
   graph.innerHTML = '';
-  const trace1 = {
-	  x: xValues,
-	  y: yValues1,
-	  type: 'scatter',
-	  mode: 'lines',
-	  name: 'Income'
-  };
-  const trace2 = {
-	  x: xValues,
-	  y: yValues2,
-	  type: 'scatter',
-	  mode: 'lines',
-	  name: 'Expense'
-  };
-  yMax = Math.max(Math.max(...yValues1), Math.max(...yValues2)) * 1.5;
-  const layout = {
-	  margin: {t:10,r:10,b:30,l:50},
+
+  var yMax = 0;
+  var traces = [];
+  for(var i = 0; i < values.length; i++) {
+    var trace = {
+      x: graphX,
+      y: values[i],
+      type: 'scatter',
+      mode: 'lines',
+      name: labels[i],
+      line: {
+        color: colors[i],
+        width: 2
+      }
+    };
+    traces.push(trace);
+    yMax = Math.max(yMax, Math.max(...values[i]));
+  }
+  yMax *= 1.2;
+
+  var layout = {
+	  margin: {
+      t:10,
+      r:10,
+      b:20,
+      l:30
+    },
 	  paper_bgcolor: "#dee1ea",
-	  xaxis: { title: 'time' },
-	  yaxis: { title: 'income', range: [0, yMax]},
+	  xaxis: { title: '' },
+	  yaxis: { title: '', range: [0, yMax]},
   };
-  Plotly.newPlot(graph, [trace1, trace2], layout);
+  Plotly.newPlot(graph, traces, layout);
+}
+
+graphValuesIncome = [];
+graphValuesExpense = [];
+graphValuesIht = [];
+graphValuesR1 = [];
+graphValuesR2 = [];
+graphValuesR3 = [];
+
+function graphUpdate(json) {
+	graphValuesIncome.push(json.totalMonthlyIncome)
+	graphValuesExpense.push(json.totalMonthlyExpense)
+  graphPlot("graphIncomeExpense", [graphValuesIncome, graphValuesExpense], ["Income", "Expense"], ['rgb(11,200,11)', 'rgb(220,11,11)']);
+
+	graphValuesIht.push(json.populationIHT)
+  graphPlot("graphIht", [graphValuesIht], ["IHT"], ["rgb(171,173,135)"]);
+
+	graphValuesR1.push(json.populationR1)
+	graphValuesR2.push(json.populationR2)
+	graphValuesR3.push(json.populationR3)
+  graphPlot("graphRs", [graphValuesR1, graphValuesR2, graphValuesR3], ["R1",  "R2", "R3"], ["rgb(4,255,97)", "rgb(2,207,79)", "rgb(0,126,47)"]);
 }
 </script>
 
 </head>
 <body>
-  <div id="header">
-    <h3>Sim City 4 Web-Interface Plug-In</h3>
+  <div class="header">
+    <h3>Sim City 4 Web-Interface</h3>
   </div>
+  <div class="content">
 
-  <div id="content">
-    <div id="outer" style="width: 310px">
-      <h4>State</h4>
-      <div id="inner">
-        <h5>Game Speed</h5>
-        <button class="button" onclick="playPause()">Play/Pause</button><br />
+    <div class="outer" style="max-width: 210px; max-height: 112px;">
+      <h4>Speed<div class="foldbutton">&#x25B2;</div></h4>
+      <div class="inner"">
+        <h5>Auto-Pause</h5>
+
+        <input type="checkbox" id="pauseMonth">
+        <label for="pauseMonth">at end of month</label><br>
+
+        <input type="checkbox" id="pauseMonthExpenses">
+        <label for="pauseMonthExpenses">if income falls below expenses</label><br>
       </div>
-      <div id="inner">
+    </div>
+
+    <div class="outer" style="max-width: 480px; height: 310px;">
+      <h4>Income/Expenses<div class="foldbutton">&#x25B2;</div></h4>
+      <div class="inner">
+        <div class="graph" id="graphIncomeExpense" style="height: 262px; width: 460px"></div>
+      </div>
+    </div>
+
+    <div class="outer" style="max-width: 250px; height: 210px;">
+      <h4>Jobs IHT<div class="foldbutton">&#x25B2;</div></h4>
+      <div class="inner">
+        <div class="graph" id="graphIht" style="height: 162px; width: 240px"></div>
+      </div>
+    </div>
+
+    <div class="outer" style="max-width: 250px; height: 210px;">
+      <h4>Residential Population<div class="foldbutton">&#x25B2;</div></h4>
+      <div class="inner">
+        <div class="graph" id="graphRs" style="height: 162px; width: 240px"></div>
+      </div>
+    </div>
+
+    <div class="outer" style="max-width: 320px; height: 418px;">
+      <h4>State<div class="foldbutton">&#x25B2;</div></h4>
+      <div class="inner">
         <h5>JSON</h5>
-        <textarea rows="18" cols="64" id="state" placeholder="connecting" spellcheck="false"></textarea>
+        <textarea rows="33" cols="64" id="state" placeholder="connecting" spellcheck="false"></textarea>
       </div>
     </div>
-    <div style="width: 8px"></div>
-    <div id="outer" style="width: 480px">
-      <h4>Income/Expenses</h4>
-      <div id="inner">
-        <div class="graph" id="graph" style="height: 280px; width: 460px"></div>
-      </div>
-     </div>
-    <div id="footer">
-      SimCity4 WebInterface Plugin : D.Salzner : www.dennissalzner.de : 2024
-    </div>
+
   </div>
+  <div class="footer">
+    SimCity4 WebInterface Plugin : D.Salzner : www.dennissalzner.de : 2024
+  </div>
+<script>
+  var elements = document.getElementsByClassName("outer");
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener("click", function() {
+      var s = this.getElementsByClassName("inner");
+      var foldbutton = this.getElementsByClassName("foldbutton")[0];
+      for (var j = 0; j < s.length; j++) {
+        if (s[j].style.display == "none") {
+          s[j].style.display = "block";
+          this.style.height = this.origheight;
+          foldbutton.innerHTML = "&#x25B2;";
+        } else {
+          s[j].style.display = "none";
+          this.origheight = this.style.height;
+          this.style.height = "28px";
+          foldbutton.innerHTML = "&#x25BC;";
+        }
+      }
+    });
+  }
+</script>
 </body>
 </html>
